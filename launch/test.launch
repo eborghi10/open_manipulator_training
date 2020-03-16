@@ -1,0 +1,4 @@
+<launch>
+	<!-- Gazebo -->
+	<include file="$(find open_manipulator_gazebo)/launch/open_manipulator_gazebo.launch"/>
+</launch>
