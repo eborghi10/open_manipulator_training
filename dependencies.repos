@@ -1,0 +1,13 @@
+repositories:
+  open_manipulator:
+    type: git
+    url: https://github.com/eborghi10/open_manipulator.git
+    version: master
+  open_manipulator_simulations:
+    type: git
+    url: https://github.com/eborghi10/open_manipulator_simulations.git
+    version: master
+  robotis_manipulator:
+    type: git
+    url: https://github.com/ROBOTIS-GIT/robotis_manipulator.git
+    version: master
