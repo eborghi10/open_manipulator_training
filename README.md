@@ -34,7 +34,7 @@ roslaunch open_manipulator_moveit demo.launch use_gui:=true
 # Spawn Gazebo
 roslaunch open_manipulator_training test.launch
 # Move the arm to some predefined poses in Gazebo
-roslaunch open_manipulator_moveit test.launch
+roslaunch open_manipulator_moveit planning_execution.launch
 ```
 
 ## TODO

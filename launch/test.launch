@@ -1,4 +1,5 @@
 <launch>
 	<!-- Gazebo -->
 	<include file="$(find open_manipulator_gazebo)/launch/open_manipulator_gazebo.launch"/>
+  <include file="$(find open_manipulator_moveit)/launch/planning_execution.launch"/>
 </launch>
