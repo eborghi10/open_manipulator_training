@@ -30,11 +30,67 @@ roslaunch open_manipulator_moveit demo.launch use_gui:=true
 
 ### MoveIt! + Gazebo
 
+#### Old approach
+
 ```bash
 # Spawn Gazebo
 roslaunch open_manipulator_training test.launch
 # Move the arm to some predefined poses in Gazebo
 roslaunch open_manipulator_moveit planning_execution.launch
+```
+
+#### [New approach](http://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros_operation/#launch-moveit)
+
+```bash
+roslaunch open_manipulator_controllers joint_trajectory_controller.launch
+```
+
+## Grasping
+
+### Old approach
+
+```bash
+roslaunch open_manipulator_training test.launch
+rosrun open_manipulator_training grasping_test
+```
+
+### [New approach](http://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros_applications/#simulation)
+
+```bash
+roslaunch open_manipulator_gazebo open_manipulator_gazebo.launch
+
+roslaunch open_manipulator_controller open_manipulator_controller.launch use_platform:=false
+
+roslaunch open_manipulator_ar_markers ar_pose.launch camera_model:=realsense_d435 use_platform:=false
+
+roslaunch open_manipulator_pick_and_place open_manipulator_pick_and_place.launch
+
+roslaunch open_manipulator_training spawn_ar_box.launch x:=0.5
+```
+
+### Improved approach
+
+```bash
+# Open Gazebo and MoveIt!
+roslaunch open_manipulator_controllers joint_trajectory_controller.launch rviz:=false
+# Spawn AR box
+roslaunch open_manipulator_training spawn_ar_box.launch x:=0.5 z:=0.15
+# Open Marker detection node
+roslaunch open_manipulator_ar_markers ar_pose.launch camera_model:=raspicam use_platform:=false
+# Execute Pick and Place node
+roslaunch open_manipulator_pick_and_place open_manipulator_pick_and_place.launch
+```
+
+#### [Move the robot with a script](http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/moveit_commander_scripting/moveit_commander_scripting_tutorial.html#moveit-commander-scripting)
+
+```bash
+rosrun moveit_commander moveit_commander_cmdline.py
+```
+
+```bash
+roslaunch open_manipulator_controllers joint_trajectory_controller.launch
+
+rosrun open_manipulator_training move_to_ar_box
 ```
 
 ## TODO

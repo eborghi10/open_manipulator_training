@@ -1,11 +1,19 @@
 repositories:
+  dynamixel-workbench:
+    type: git
+    url: https://github.com/ROBOTIS-GIT/dynamixel-workbench.git
+    version: master
   open_manipulator:
     type: git
-    url: https://github.com/eborghi10/open_manipulator.git
+    url: https://github.com/ROBOTIS-GIT/open_manipulator.git
     version: master
-  open_manipulator_simulations:
+  open_manipulator_controls:
     type: git
-    url: https://github.com/eborghi10/open_manipulator_simulations.git
+    url: https://github.com/ROBOTIS-GIT/open_manipulator_controls.git
+    version: master
+  open_manipulator_perceptions:
+    type: git
+    url: https://github.com/ROBOTIS-GIT/open_manipulator_perceptions.git
     version: master
   robotis_manipulator:
     type: git
