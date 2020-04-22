@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="box_sdf">
+    <pose>0 0 0.05 0 0 0</pose>
+    <static>true</static>
+    <link name="box_link">
+      <collision name="body_collision">
+        <geometry>
+          <box>
+            <size>0.05 0.05 0.05</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="body_visual">
+        <geometry>
+          <box>
+            <size>0.05 0.05 0.05</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://box_sdf</uri>
+            <name>ar/Tag</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
