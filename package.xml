@@ -25,6 +25,7 @@
   <build_depend>moveit_visual_tools</build_depend>
   <build_depend>open_manipulator_gazebo</build_depend>
   <build_depend>open_manipulator_moveit</build_depend>
+  <build_depend>tf</build_depend>
 
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>interactive_markers</exec_depend>
@@ -34,6 +35,7 @@
   <exec_depend>moveit_visual_tools</exec_depend>
   <exec_depend>open_manipulator_gazebo</exec_depend>
   <exec_depend>open_manipulator_moveit</exec_depend>
+  <exec_depend>tf</exec_depend>
 
   <export>
     <gazebo_ros

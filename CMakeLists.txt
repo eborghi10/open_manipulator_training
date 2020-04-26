@@ -23,6 +23,7 @@ find_package(catkin REQUIRED
     moveit_ros_planning_interface
     open_manipulator_gazebo
     open_manipulator_moveit
+    tf
 )
 
 ###################################
