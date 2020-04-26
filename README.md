@@ -74,7 +74,7 @@ roslaunch open_manipulator_training spawn_ar_box.launch x:=0.5
 # Open Gazebo and MoveIt!
 roslaunch open_manipulator_controllers joint_trajectory_controller.launch rviz:=false
 # Spawn AR box
-roslaunch open_manipulator_training spawn_ar_box.launch x:=0.5 z:=0.15
+roslaunch open_manipulator_training spawn_ar_box.launch x:=0.3
 # Open Marker detection node
 roslaunch open_manipulator_ar_markers ar_pose.launch camera_model:=raspicam use_platform:=false
 # Execute Pick and Place node
@@ -84,15 +84,36 @@ roslaunch open_manipulator_pick_and_place open_manipulator_pick_and_place.launch
 #### [Move the robot with a script](http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/moveit_commander_scripting/moveit_commander_scripting_tutorial.html#moveit-commander-scripting)
 
 ```bash
+# TODO: do this with the C++ API
+# http://docs.ros.org/jade/api/moveit_ros_planning_interface/html/classmoveit_1_1planning__interface_1_1MoveGroup.html#a8280f121bc31a59de9f07c94e957f1be
 rosrun moveit_commander moveit_commander_cmdline.py
+
+use arm
+
+rec c
+
+c[3]=1.1
+
+plan c
+
+execute
 ```
+
+```bash
+# Run Gazebo
+roslaunch open_manipulator_controllers joint_trajectory_controller.launch rviz:=false
+# Spawn AR box
+roslaunch open_manipulator_training spawn_ar_box.launch x:=0.3
+# AR recognition (FAILS THE FIRST TIME)
+roslaunch open_manipulator_ar_markers ar_pose.launch camera_model:=raspicam use_platform:=false
+# Move joint to AR box
+rosrun open_manipulator_training move_to_ar_box
+```
+
+#### Python approach
 
 ```bash
 roslaunch open_manipulator_controllers joint_trajectory_controller.launch
 
-rosrun open_manipulator_training move_to_ar_box
+rosrun open_manipulator_training move_group_python_interface_tutorial.py
 ```
-
-## TODO
-
-- [Generate `hand_controller` (move joints in groups)](https://github.com/ekorudiawan/notes/wiki/Motion-Planning-dengan-ROS-dan-MoveIt)
