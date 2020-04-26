@@ -3,7 +3,7 @@
 <launch>
   <arg name="x" default="0.0" />
   <arg name="y" default="0.0" />
-  <arg name="z" default="0.05" />
+  <arg name="z" default="0.0" />
   <arg name="yaw" default="0.0" />
 
   <arg name="box_name" value="ar_box" />
