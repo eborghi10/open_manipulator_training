@@ -13,13 +13,7 @@ rosdep update
 rosdep install --from-paths src -i -y
 ```
 
-## Running simulation
-
-```bash
-roslaunch open_manipulator_training test.launch
-```
-
-### Testing MoveIt!
+### Testing MoveIt! for the first time
 
 ```bash
 # Setup MoveIt!
@@ -28,64 +22,24 @@ roslaunch moveit_setup_assistant setup_assistant.launch
 roslaunch open_manipulator_moveit demo.launch use_gui:=true
 ```
 
-### MoveIt! + Gazebo
+### [MoveIt! + Gazebo](http://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros_operation/#launch-moveit)
 
-#### Old approach
-
-```bash
-# Spawn Gazebo
-roslaunch open_manipulator_training test.launch
-# Move the arm to some predefined poses in Gazebo
-roslaunch open_manipulator_moveit planning_execution.launch
-```
-
-#### [New approach](http://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros_operation/#launch-moveit)
+#### [Grasping](http://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros_applications/#simulation)
 
 ```bash
-roslaunch open_manipulator_controllers joint_trajectory_controller.launch
-```
-
-## Grasping
-
-### Old approach
-
-```bash
-roslaunch open_manipulator_training test.launch
-rosrun open_manipulator_training grasping_test
-```
-
-### [New approach](http://emanual.robotis.com/docs/en/platform/openmanipulator_x/ros_applications/#simulation)
-
-```bash
-roslaunch open_manipulator_gazebo open_manipulator_gazebo.launch
-
-roslaunch open_manipulator_controller open_manipulator_controller.launch use_platform:=false
-
-roslaunch open_manipulator_ar_markers ar_pose.launch camera_model:=realsense_d435 use_platform:=false
-
-roslaunch open_manipulator_pick_and_place open_manipulator_pick_and_place.launch
-
-roslaunch open_manipulator_training spawn_ar_box.launch x:=0.5
-```
-
-### Improved approach
-
-```bash
-# Open Gazebo and MoveIt!
+# Run Gazebo
 roslaunch open_manipulator_controllers joint_trajectory_controller.launch rviz:=false
 # Spawn AR box
 roslaunch open_manipulator_training spawn_ar_box.launch x:=0.3
-# Open Marker detection node
+# AR recognition
 roslaunch open_manipulator_ar_markers ar_pose.launch camera_model:=raspicam use_platform:=false
-# Execute Pick and Place node
-roslaunch open_manipulator_pick_and_place open_manipulator_pick_and_place.launch
+# Move joint to AR box
+rosrun open_manipulator_training move_to_ar_box
 ```
 
-#### [Move the robot with a script](http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/moveit_commander_scripting/moveit_commander_scripting_tutorial.html#moveit-commander-scripting)
+##### [Move the robot with a script](http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/moveit_commander_scripting/moveit_commander_scripting_tutorial.html#moveit-commander-scripting)
 
 ```bash
-# TODO: do this with the C++ API
-# http://docs.ros.org/jade/api/moveit_ros_planning_interface/html/classmoveit_1_1planning__interface_1_1MoveGroup.html#a8280f121bc31a59de9f07c94e957f1be
 rosrun moveit_commander moveit_commander_cmdline.py
 
 use arm
@@ -99,21 +53,14 @@ plan c
 execute
 ```
 
-```bash
-# Run Gazebo
-roslaunch open_manipulator_controllers joint_trajectory_controller.launch rviz:=false
-# Spawn AR box
-roslaunch open_manipulator_training spawn_ar_box.launch x:=0.3
-# AR recognition (FAILS THE FIRST TIME)
-roslaunch open_manipulator_ar_markers ar_pose.launch camera_model:=raspicam use_platform:=false
-# Move joint to AR box
-rosrun open_manipulator_training move_to_ar_box
-```
-
-#### Python approach
+## TO TEST
 
 ```bash
-roslaunch open_manipulator_controllers joint_trajectory_controller.launch
-
-rosrun open_manipulator_training move_group_python_interface_tutorial.py
+# Gravity compensation controller
+roslaunch open_manipulator_controls gravity_compensation_controller.launch
+# Execute Pick and Place node
+roslaunch open_manipulator_pick_and_place open_manipulator_pick_and_place.launch
 ```
+
+- [Watch this](https://www.youtube.com/watch?v=E71pb2H4VDQ)
+- [Read this](https://sir.upc.edu/projects/rostutorials/10-gazebo_control_tutorial/index.html#working-with-ros-control)

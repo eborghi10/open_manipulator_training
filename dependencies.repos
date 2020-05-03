@@ -15,6 +15,10 @@ repositories:
     type: git
     url: https://github.com/ROBOTIS-GIT/open_manipulator_perceptions.git
     version: master
+  roboticsgroup_gazebo_plugins:
+    type: git
+    url: https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
+    version: master
   robotis_manipulator:
     type: git
     url: https://github.com/ROBOTIS-GIT/robotis_manipulator.git

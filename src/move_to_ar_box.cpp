@@ -80,6 +80,7 @@ int main(int argc, char** argv)
   // The :move_group_interface:`MoveGroupInterface` class can be easily
   // setup using just the name of the planning group you would like to control and plan for.
   moveit::planning_interface::MoveGroupInterface arm_group(ARM_PLANNING_GROUP);
+  moveit::planning_interface::MoveGroupInterface gripper_group(GRIPPER_PLANNING_GROUP);
 
   // We will use the :planning_scene_interface:`PlanningSceneInterface`
   // class to add and remove collision objects in our "virtual world" scene
@@ -108,8 +109,10 @@ int main(int argc, char** argv)
 
   // Create a RobotState and JointModelGroup to keep track of the current robot pose and planning group
   robot_state::RobotStatePtr robot_state(new robot_state::RobotState(robot_model));
-  const robot_state::JointModelGroup* joint_model_group =
+  const robot_state::JointModelGroup* joint_arm_group =
       arm_group.getCurrentState()->getJointModelGroup(ARM_PLANNING_GROUP);
+  const robot_state::JointModelGroup* joint_gripper_group =
+      gripper_group.getCurrentState()->getJointModelGroup(GRIPPER_PLANNING_GROUP);
 
   // Visualization
   // ^^^^^^^^^^^^^
@@ -153,6 +156,10 @@ int main(int argc, char** argv)
   arm_group.allowReplanning(true);
   arm_group.setNumPlanningAttempts(10);
 
+  gripper_group.setPlannerId("RRTConnectkConfigDefault");
+  gripper_group.allowReplanning(true);
+  gripper_group.setNumPlanningAttempts(10);
+
   arm_group.setStartState(*arm_group.getCurrentState());
   arm_group.setNamedTarget("zero");
   arm_group.move();
@@ -173,7 +180,7 @@ int main(int argc, char** argv)
 
   // Next get the current set of joint values for the group.
   std::vector<double> joint_group_positions;
-  current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
+  current_state->copyJointGroupPositions(joint_arm_group, joint_group_positions);
 
   // Now, let’s modify one of the joints, plan to the new joint space goal and visualize the plan.
   joint_group_positions[3] = 1.1;  // radians
@@ -236,13 +243,25 @@ int main(int argc, char** argv)
   ROS_INFO_NAMED("tutorial", "Visualizing plan 1 as trajectory line");
   visual_tools.publishAxisLabeled(target_pose1, "ar_box_pose");
   visual_tools.publishText(text_pose, "AR box pose", rvt::WHITE, rvt::XLARGE);
-  visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+  visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_arm_group);
   visual_tools.trigger();
   visual_tools.prompt("Press 'next' in the RvizVisualToolsGui window to continue the demo");
 
+
+  // https://answers.ros.org/question/242507/moveit-cant-plan-to-a-pose-goal/?answer=245691#post-id-245691
   // Open gripper
+  // gripper_group.setStartState(*gripper_group.getCurrentState());
+  // gripper_group.setNamedTarget("open");
+  // gripper_group.move();
+  // sleep(2.0);
+  std::vector<double> joint_gripper_group_positions;
+  current_state->copyJointGroupPositions(joint_gripper_group, joint_gripper_group_positions);
+  // Now, let’s modify one of the joints, plan to the new joint space goal and visualize the plan.
+  joint_gripper_group_positions[0] = 0.019;  // radians
+  gripper_group.setJointValueTarget(joint_group_positions);
+  gripper_group.move();
 
-
+  sleep(5.0);
 
   // Moving to a pose goal
   // ^^^^^^^^^^^^^^^^^^^^^
@@ -258,6 +277,15 @@ int main(int argc, char** argv)
   /* Uncomment below line when working with a real robot */
   arm_group.move();
   // arm_group.asyncExecute(plan);
+
+  // Close gripper
+  gripper_group.setStartState(*gripper_group.getCurrentState());
+  gripper_group.setNamedTarget("close");
+  // current_state->copyJointGroupPositions(joint_gripper_group, joint_gripper_group_positions);
+  // joint_gripper_group_positions[0] = -0.01;  // radians
+  // gripper_group.setJointValueTarget(joint_group_positions);
+  gripper_group.move();
+  sleep(5.0);
 
   exit(0);
 
@@ -291,7 +319,7 @@ int main(int argc, char** argv)
   // start_pose2.position.x = 0.55;
   // start_pose2.position.y = -0.05;
   // start_pose2.position.z = 0.8;
-  // start_state.setFromIK(joint_model_group, start_pose2);
+  // start_state.setFromIK(joint_arm_group, start_pose2);
   // arm_group.setStartState(start_state);
 
   // Now we will plan to the earlier pose target from the new
@@ -310,7 +338,7 @@ int main(int argc, char** argv)
   // visual_tools.publishAxisLabeled(start_pose2, "start");
   // visual_tools.publishAxisLabeled(target_pose1, "goal");
   // visual_tools.publishText(text_pose, "Constrained Goal", rvt::WHITE, rvt::XLARGE);
-  // visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+  // visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_arm_group);
   // visual_tools.trigger();
   // visual_tools.prompt("next step");
 
@@ -422,7 +450,7 @@ int main(int argc, char** argv)
   // Visualize the plan in RViz
   visual_tools.deleteAllMarkers();
   visual_tools.publishText(text_pose, "Obstacle Goal", rvt::WHITE, rvt::XLARGE);
-  visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_model_group);
+  visual_tools.publishTrajectoryLine(my_plan.trajectory_, joint_arm_group);
   visual_tools.trigger();
   visual_tools.prompt("next step");
 
